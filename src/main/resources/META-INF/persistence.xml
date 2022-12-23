@@ -4,6 +4,7 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2_1.xsd">
 	<persistence-unit name="projetojava_jpa_fundamentos">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<class>br.com.projetojava.jpa.models.Pessoa</class>
 		<properties>
 		<!-- Configurações da JPA -->
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
