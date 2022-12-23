@@ -5,10 +5,17 @@
 	<persistence-unit name="projetojava_jpa_fundamentos">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<properties>
+		<!-- Configurações da JPA -->
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/twjpa"/>
 			<property name="javax.persistence.jdbc.user" value="twclientes_user"/>
 			<property name="javax.persistence.jdbc.password" value="twclientes_pwd"/>
+			
+			<!-- Hibernate -->
+			<!-- <property name="" value=""/> -->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+			<property name="hibernate.show_sql" value="true"/>
+			<property name="hibernate.hbm2ddl.auto" value="update"/>
 		</properties>
 	</persistence-unit>
 </persistence>
