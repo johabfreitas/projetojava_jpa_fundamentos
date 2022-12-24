@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import org.hibernate.Session;
+
 import br.com.projetojava.jpa.models.Pessoa;
 import br.com.projetojava.jpa.services.interfaces.CrudService;
 import br.com.projetojava.jpa.utils.JpaUtils;
@@ -28,17 +30,49 @@ public class PessoaService implements CrudService<Pessoa, Integer>{
 
 	@Override
 	public Pessoa byId(Integer id) {
-		return null;
+		EntityManager em = null;
+		try {
+			em  = JpaUtils.getEntityManager();
+			return em.find(Pessoa.class, id);
+		} finally {
+			if(em != null) {
+				em.close();
+			}
+		}
+		
 	}
 
 	@Override
 	public Pessoa insert(Pessoa entity) {
-		return null;
+		EntityManager em = null;
+		try {
+			em  = JpaUtils.getEntityManager();
+			em.getTransaction().begin();
+			em.persist(entity);
+			em.getTransaction().commit();
+			return entity;
+		} finally {
+			if(em != null) {
+				em.close();
+			}
+		}
 	}
 
 	@Override
 	public Pessoa update(Pessoa entity) {
-		return null;
+		EntityManager em = null;
+		try {
+			em  = JpaUtils.getEntityManager();
+			em.getTransaction().begin();
+//			em.merge(entity);
+			em.unwrap(Session.class).update(entity);
+			em.getTransaction().commit();
+			return entity;
+		}finally {
+			if(em != null) {
+				em.close();
+			}
+		}
 	}
 
 	@Override
