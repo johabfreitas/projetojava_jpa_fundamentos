@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import br.com.projetojava.jpa.models.Pessoa;
-import br.com.projetojava.jpa.services.interfaces.CrudService;
+import br.com.projetojava.jpa.services.interfaces.PessoaBuscaPorNome;
 import br.com.projetojava.jpa.utils.JpaUtils;
 
-public class PessoaService implements CrudService<Pessoa, Integer> {
+public class PessoaService implements PessoaBuscaPorNome {
 
 	@Override
 	public List<Pessoa> all() {
@@ -99,6 +102,29 @@ public class PessoaService implements CrudService<Pessoa, Integer> {
 				em.remove(pessoaASerDeletada);
 				em.getTransaction().commit();
 			}
+		} finally {
+			if (em != null) {
+				em.close();
+			}
+		}
+	}
+
+	@Override
+	public List<Pessoa> searchByName(String name) {
+		EntityManager em = null;
+		try {
+			em = JpaUtils.getEntityManager();
+//			List<Pessoa> pessoas = em
+//					.createQuery("from Pessoa p where lower(p.nome) like lower(concat('%', :nome, '%'))", Pessoa.class)
+//					.setParameter("nome", name).getResultList();
+			
+			CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+			CriteriaQuery<Pessoa> buscaPorNomeCriteria = criteriaBuilder.createQuery(Pessoa.class);
+			Root<Pessoa> raiz = buscaPorNomeCriteria.from(Pessoa.class);
+			buscaPorNomeCriteria.where(
+					criteriaBuilder.like(criteriaBuilder.lower(raiz.get("nome")), "%" + name.toLowerCase() + "%"));
+			List<Pessoa> pessoas = em.createQuery(buscaPorNomeCriteria).getResultList();
+			return pessoas;
 		} finally {
 			if (em != null) {
 				em.close();
